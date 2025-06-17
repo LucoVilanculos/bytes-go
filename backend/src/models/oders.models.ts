@@ -15,4 +15,4 @@ const orderSchema = new Schema<OrderProps>(
   { timestamps: true }
 );
 
-export const Order = mongoose.model<OrderProps>("Order", orderSchema);
+export const Order = mongoose.models.Order || mongoose.model<OrderProps>("Order", orderSchema);

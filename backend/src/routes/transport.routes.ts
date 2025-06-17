@@ -9,17 +9,17 @@ import {
 import { AuthenticationToken } from "../middleware/auth.Milddleware";
 import { authorizeRoles } from "../controller/transport.controller"; // este middleware valida roles
 
-export const TransportRouter = Router();
+export const CarstRouter = Router();
 
-TransportRouter.post("/", AuthenticationToken, authorizeRoles("driver", "admin"), createTransport);
+CarstRouter.post("/", AuthenticationToken, authorizeRoles("driver", "admin"), createTransport);
 
-TransportRouter.get("/", AuthenticationToken, authorizeRoles("admin", "driver", "user"), getAllTransports);
+CarstRouter.get("/", AuthenticationToken, authorizeRoles("admin", "driver", "user"), getAllTransports);
 
-TransportRouter.get("/:id", AuthenticationToken, authorizeRoles("user", "admin", "driver"), getTransportById);
+CarstRouter.get("/:id", AuthenticationToken, authorizeRoles("user", "admin", "driver"), getTransportById);
 
-TransportRouter.put("/:id", AuthenticationToken, authorizeRoles("driver", "admin"), updateTransport);
+CarstRouter.put("/:id", AuthenticationToken, authorizeRoles("driver", "admin"), updateTransport);
 
-TransportRouter.delete(
+CarstRouter.delete(
   "/:id",
   AuthenticationToken,
   authorizeRoles("admin", "driver"),

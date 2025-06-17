@@ -8,7 +8,7 @@ import { AuthRouter } from "./routes/auth.routes";
 import { UserRouter } from "./routes/user.routes";
 import { FaqRouter } from "./routes/faq.routes";
 import { OrderRouter } from "./routes/orders.routes";
-import { TransportRouter } from "./routes/transport.routes";
+import { CarstRouter } from "./routes/transport.routes";
 import { TutorialRouter } from "./routes/tutorial.routes";
 
 
@@ -22,11 +22,11 @@ const host = process.env.HOST || "http://localhost";
 const port = process.env.PORT || 3002;
 
 app.use("/auth", AuthRouter);
-app.use("/users", UserRouter);
-app.use("/faqs", FaqRouter);
-app.use("/orders", OrderRouter);
-app.use("/transports", TransportRouter);
-app.use("/tutorials", TutorialRouter);
+app.use("/user", UserRouter);
+app.use("/faq", FaqRouter);
+app.use("/order", OrderRouter);
+app.use("/car", CarstRouter);
+app.use("/tutorial", TutorialRouter);
 
 
 mongoose

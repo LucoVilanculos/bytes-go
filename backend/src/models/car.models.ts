@@ -1,7 +1,7 @@
-import mongoose, { model, Schema } from "mongoose";
+import mongoose from "mongoose";
 import { CarProps } from "../types/carprops";
 
-export const carSchema = new Schema<CarProps>(
+const carSchema = new mongoose.Schema<CarProps>(
   {
     brand: { type: String, required: true },
     carModel: { type: String, required: true },
@@ -27,4 +27,4 @@ export const carSchema = new Schema<CarProps>(
   { timestamps: true }
 );
 
-export const Car = model<CarProps>("Faq", carSchema);
+export const Car = mongoose.models.Car || mongoose.model<CarProps>("Car", carSchema);

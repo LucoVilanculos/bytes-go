@@ -1,7 +1,8 @@
 Projecto Hackton - BytesGo (React + Express + TypeScript + MongoDB)
 
-Este repositório contém o projecto apresentar no Hackton desenvolvido pelos alunos da segunda edição do Bytes 4 Future (B4F), (grupon2).
-O projecto coniste em um sistema que busca resolver um problema de uma empresa Moçambicana que faz táxi por aplicativo. Este projecto em sistema com frontend em React e backend em Express + TypeScript + MongoDB. 
+Este repositório contém o projecto para apresentar no Hackton desenvolvido pelos alunos da segunda edição do Bytes 4 Future (B4F), (grupo2).
+O projecto coniste em um sistema que busca resolver um problema de uma empresa Moçambicana que faz táxi por aplicativo. 
+Este projecto consiste igualmente em um sistema com frontend em React e backend em Express + TypeScript + MongoDB. 
 
 ## 📁 Estrutura do Projeto
 /(raiz)

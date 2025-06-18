@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
-import { About, Home, OrdersUser, CheckoutPage, AdminPage, ErrorPage, Products, Login, Register, Account, Details, ContactPage } from "./pages";
+import { About, Home, AdminPage, ErrorPage, Login, Register, ContactPage, Denuncia } from "./pages";
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
 
@@ -35,42 +35,7 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
-      {
-        path: "/account",
-        element: (
-          <RequireAuth>
-            <Account />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "/checkout",
-        element: (
-          <RequireAuth>
-            <CheckoutPage />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "/shop",
-        element: <Products />,
-      },
-      {
-        path: "/details/:id",
-        element: <Details />,
-      },
-      {
-        path: "/product/:id",
-        element: <Details />,
-      },
-      {
-        path: "/orders",
-        element: (
-          <RequireAuth>
-            <OrdersUser />
-          </RequireAuth>
-        ),
-      },
+      
       {
         path: "/admin",
         element: (
@@ -80,12 +45,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/products",
-        element: <Products />,
-      },
-      {
         path: "/contacts",
         element: <ContactPage />,
+      },
+      {
+        path: "/denuncia",
+        element: <Denuncia />,
       },
     ],
   },

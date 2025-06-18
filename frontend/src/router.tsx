@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
 
-import { About, Home, OrdersUser, AdminPage, ErrorPage, Products, Login, RegisterPage, Account, Driver, ContactPage } from "./pages";
-
+import { About, Home,  AdminPage, ErrorPage,  Login,  Account, Driver, ContactPage } from "./pages";
+import { Register } from "./pages/register";
 
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
@@ -36,50 +36,25 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <RegisterPage />,
+        element: <Register />,
       },
-      {
-        path: "/account",
-        element: (
-          <RequireAuth>
-            <Account />
-          </RequireAuth>
-        ),
-      },
-      {
-
-        path: "/checkout",
-        element: (
-          <RequireAuth>
-            < Driver/>
-          </RequireAuth>
-        ),
-      },
-      {
-
-        path: "/shop",
-        element: <Products />,
-      },
-      {
-        path: "/orders",
-        element: (
-          <RequireAuth>
-            <OrdersUser />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "/admin",
-        element: (
-          <RequireAuth>
-            <AdminPage />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "/products",
-        element: <Products />,
-      },
+    {
+      path: "/account",
+      element: (
+        <RequireAuth>
+          <Account />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/admin",
+      element: (
+        <RequireAuth>
+          <AdminPage />
+        </RequireAuth>
+      ),
+    },
+      
       {
         path: "/contacts",
         element: <ContactPage />,

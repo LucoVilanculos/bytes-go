@@ -24,10 +24,13 @@ export function ContactPage() {
       >
         {/* Texto de contato */}
         <section className="flex-1 max-w-md text-white">
-          <h1 className="text-3xl font-bold mb-6">CONTACT US</h1>
+          <h1 className="text-3xl font-bold mb-6">Contacte-nos</h1>
           <article className="text-base mt-6 text-blue-100">
-            <p>Need to get in touch with us? Please fill out the form and leave us a message.</p>
-            <p>Our team will get back to you within 1-3 business days!</p>
+         <div>
+          A BytesGo valoriza cada contacto. Se tiver dúvidas, sugestões ou qualquer questão, preencha o formulário, a nossa equipa analisará a sua mensagem com atenção e responderá o mais breve possível. Estamos aqui para garantir que a sua experiência com a BytesGo seja sempre segura, prática e satisfatória.
+
+
+         </div>
           </article>
         </section>
 
@@ -38,7 +41,7 @@ export function ContactPage() {
               <div className="flex flex-col gap-5">
                 <div className="grid gap-2">
                   <Label htmlFor="name">
-                    <span className="font-bold">Name</span> <span className="text-gray-500">(required)</span>
+                    <span className="font-bold">Nome</span> <span className="text-gray-500">(Obrigatório)</span>
                   </Label>
                   <Input
                     id="name"
@@ -49,7 +52,7 @@ export function ContactPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">
-                    <span className="font-bold">Your email address</span> <span className="text-gray-500">(required)</span>
+                    <span className="font-bold">E-mail</span> <span className="text-gray-500">(Obrigatório)</span>
                   </Label>
                   <Input
                     id="email"
@@ -60,7 +63,7 @@ export function ContactPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="phoneNumber">
-                    <span className="font-bold">Phone Number</span> <span className="text-gray-500">(optional)</span>
+                    <span className="font-bold">Contacto</span> <span className="text-gray-500">(Opcional)</span>
                   </Label>
                   <Input
                     id="phoneNumber"
@@ -70,7 +73,7 @@ export function ContactPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="location">
-                    <span className="font-bold">Location</span> <span className="text-gray-500">(optional)</span>
+                    <span className="font-bold">Morada</span> <span className="text-gray-500">(Opcional)</span>
                   </Label>
                   <Input
                     id="location"
@@ -80,7 +83,7 @@ export function ContactPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="subject">
-                    <span className="font-bold">Subject</span> <span className="text-gray-500">(required)</span>
+                    <span className="font-bold">Assunto</span> <span className="text-gray-500">(Obrigatório)</span>
                   </Label>
                   <Input
                     id="subject"
@@ -91,8 +94,8 @@ export function ContactPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="description">
-                    <span className="font-bold">Description</span> <span className="text-gray-500">(required)</span>
-                  </Label>
+                    <span className="font-bold">Descrição</span> <span className="text-gray-500">(Obrigatório)</span>
+                  </Label> 
                   <textarea
                     id="description"
                     name="description"
@@ -107,7 +110,7 @@ export function ContactPage() {
                   type="submit"
                   className="w-full mt-6 rounded-full bg-blue-900 text-white font-semibold hover:scale-105 hover:bg-blue-800 transition"
                 >
-                  Submit
+                  Submeter
                 </Button>
               </CardFooter>
             </form>

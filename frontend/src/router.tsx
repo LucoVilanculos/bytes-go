@@ -1,10 +1,9 @@
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
-
-import { About, Home, OrdersUser, AdminPage, ErrorPage, Products, Login, RegisterPage, Account, Driver, ContactPage } from "./pages";
-
-
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
+import { About, AdminPage, ContactPage, ErrorPage, Home, Login,} from "./pages";
+import { Denuncia } from "./pages/denuncias";
+import { Register } from "./pages/register";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -36,38 +35,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <RegisterPage />,
+        element: <Register/>,
       },
-      {
-        path: "/account",
-        element: (
-          <RequireAuth>
-            <Account />
-          </RequireAuth>
-        ),
-      },
-      {
 
-        path: "/checkout",
-        element: (
-          <RequireAuth>
-            < Driver/>
-          </RequireAuth>
-        ),
-      },
-      {
-
-        path: "/shop",
-        element: <Products />,
-      },
-      {
-        path: "/orders",
-        element: (
-          <RequireAuth>
-            <OrdersUser />
-          </RequireAuth>
-        ),
-      },
       {
         path: "/admin",
         element: (
@@ -77,12 +47,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/products",
-        element: <Products />,
-      },
-      {
         path: "/contacts",
         element: <ContactPage />,
+      },
+      {
+        path: "/denuncia",
+        element: <Denuncia />,
       },
     ],
   },

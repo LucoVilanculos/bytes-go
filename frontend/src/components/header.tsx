@@ -26,7 +26,8 @@ export function Header() {
   const navigate = useNavigate();
 
   const linksLeft = [
-    { label: "Shop", href: "/shop" },
+    { label: "Home", href: "/" },
+    { label: "Contact", href: "/contacts" },
     { label: "About", href: "/about" },
   ];
 
@@ -88,7 +89,7 @@ export function Header() {
         </nav>
 
         <div className="text-lg font-bold tracking-widest uppercase absolute left-1/2 -translate-x-1/2">
-          <NavLink to="/">B4F E-COMMERCE</NavLink>
+          <NavLink to="/">Bytes-GO</NavLink>
         </div>
 
         <nav className="hidden md:flex items-center gap-8 text-sm ml-auto">

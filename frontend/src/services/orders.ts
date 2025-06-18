@@ -1,6 +1,6 @@
 
 import type { CheckoutFormValues } from "../components/checkout/schemas";
-import api from "./axios-instance";
+import api from "./faqs";
 
 
 

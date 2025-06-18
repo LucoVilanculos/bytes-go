@@ -1,41 +1,32 @@
-import api from "./axios-instance";
+import axios from "axios";
+import type { UserProps } from "../types/users";
 
-/*
-export async function createUser({
-  data,
-}: {
-  data: { name: string; email: string; password: string };
-}) {
+const BASE_URL = import.meta.env.VITE_HOST;
+
+interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  role?: "customer" | "driver" | "admin";
+  phone?: string;
+  bairro?: string;
+  genero?: string;
+  car?: UserProps["car"];
+}
+
+interface RegisterResponse {
+  message: string;
+  user: UserProps;
+}
+
+export async function createUser({ data }: { data: RegisterData }) {
   try {
-    const response = await api.get(`${host}/users/`, {
-      method: "POST",
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-}*/
-
-export async function createUser({
-  data,
-}: {
-  data: { name: string; email: string; password: string };
-}) {
-  try {
-    const response = await api.post("http://localhost:3000/register", data);
-   
+    const response = await axios.post<RegisterResponse>(
+      `${BASE_URL}/register`,
+      data
+    );
     return response;
   } catch (error: any) {
-    //console.log(error);
-    return error;
+    throw error.response?.data || { message: "Erro ao registrar usuário" };
   }
 }

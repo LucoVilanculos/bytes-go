@@ -1,17 +1,26 @@
 import axios from "axios";
+import type { UserProps } from "../types/users";
 
-export async function login({
-  data,
-}: {
-  data: { email: string; password: string };
-}) {
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  message: string;
+  user: UserProps;
+  token: string;
+}
+
+const BASE_URL = import.meta.env.VITE_HOST;
+
+export async function login(data: LoginData): Promise<LoginResponse> {
   try {
-    const response = await axios.post("http://localhost:3000/login", data);
+    const response = await axios.post<LoginResponse>(`${BASE_URL}/login`, data);
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("session", JSON.stringify(response.data.user));
-    return response;
+    return response.data;
   } catch (error: any) {
-    //console.log(error);
-    return error;
+    throw error.response?.data || { message: "Erro ao conectar com o servidor" };
   }
 }

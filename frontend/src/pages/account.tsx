@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { User,LogOut } from "lucide-react";
-import api from "../services/axios-instance";
+import api from "../services/faqs";
 
 import { Button } from "../components/ui/button";
 

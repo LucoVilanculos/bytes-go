@@ -5,9 +5,9 @@ import {
   getTransportById,
   updateTransport,
   deleteTransport,
-} from "../controller/transport.controller";
+} from "../controllers/cars.controller";
 import { AuthenticationToken } from "../middleware/auth.Milddleware";
-import { authorizeRoles } from "../controller/transport.controller"; // este middleware valida roles
+import { authorizeRoles } from "../middleware/auth.Milddleware"
 
 export const CarstRouter = Router();
 

@@ -6,9 +6,10 @@ import {
   updateOrderStatus,
   deleteOrder,
   cancelOrder,
-} from "../controller/orders.controller";
+  simulateTaxiOrder,
+} from "../controllers/orders.controller";
 import { AuthenticationToken } from "../middleware/auth.Milddleware";
-import { authorizeRoles } from "../controller/transport.controller";
+import { authorizeRoles } from "../middleware/auth.Milddleware";
 
 
 export const OrderRouter = Router();
@@ -24,3 +25,5 @@ OrderRouter.put("/:id/status", AuthenticationToken,authorizeRoles("user"), updat
 OrderRouter.put("/:id/cancel", AuthenticationToken,authorizeRoles("user"), cancelOrder);
 
 OrderRouter.delete("/:id", AuthenticationToken,authorizeRoles("admin"), deleteOrder);
+
+OrderRouter.post("/simulate", AuthenticationToken, simulateTaxiOrder);

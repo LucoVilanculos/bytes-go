@@ -11,6 +11,12 @@ const orderSchema = new Schema<OrderProps>(
       default: "pending",
     },
     total: { type: Number, required: true },
+    driverLocation: { lat: Number, lng: Number },
+    pickupLocation: { lat: Number, lng: Number },
+    destination: { lat: Number, lng: Number },
+    distance: Number,
+    fuelPrice: Number,
+    congestionFactor: Number,
   },
   { timestamps: true }
 );

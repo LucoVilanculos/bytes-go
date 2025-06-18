@@ -1,5 +1,8 @@
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
+
 import { About, Home, OrdersUser, AdminPage, ErrorPage, Products, Login, RegisterPage, Account, Driver, ContactPage } from "./pages";
+
+
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
 
@@ -44,6 +47,7 @@ const router = createBrowserRouter([
         ),
       },
       {
+
         path: "/checkout",
         element: (
           <RequireAuth>
@@ -52,6 +56,7 @@ const router = createBrowserRouter([
         ),
       },
       {
+
         path: "/shop",
         element: <Products />,
       },

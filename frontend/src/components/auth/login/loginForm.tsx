@@ -1,3 +1,11 @@
+import { ArrowLeft } from "lucide-react"
+import { motion } from "framer-motion"
+import { Link, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+
 import { Button } from '../../ui/button'
 import {
   Card,
@@ -7,10 +15,6 @@ import {
   CardTitle,
 } from '../../ui/card'
 import { Input } from '../../ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 import {
   Form,
   FormControl,
@@ -21,8 +25,7 @@ import {
 } from '../../ui/form'
 import toast, { Toaster } from 'react-hot-toast'
 import { login } from '../../../services/auth'
-import { motion } from "framer-motion"
-import { ArrowLeft } from "lucide-react"
+
 
 const FormSchema = z.object({
    email: z
@@ -37,14 +40,30 @@ const FormSchema = z.object({
 export const LoginForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+  });
   const navigate = useNavigate();
 
   async function onSubmit(user: z.infer<typeof FormSchema>) {
     try {
       await login({ email: user.email, password: user.password });
       toast.success('Login successful!', { id: "1" });
-      window.location.href = '/';
+
+      const session = localStorage.getItem("session");
+      let role = "";
+      if (session) {
+        try {
+          role = JSON.parse(session).role;
+        } catch {}
+      }
+
+      if (role === "admin") {
+        navigate("/admin");
+      } else if (role === "driver") {
+        // Redireciona para o quiz/tutorial das avenidas, permitindo pular
+        navigate("/driver-avenidas");
+      } else {
+        navigate("/user");
+      }
     } catch (error) {
       toast.error("Incorrect Email or Password. Please check your credentials.", { id: "1" });
     }
@@ -60,7 +79,7 @@ export const LoginForm = () => {
             </p>
           </div>
           <img
-            src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=80"
+            src="https://cdn.discordapp.com/attachments/1363901798192120038/1384926762198237388/ChatGPT_Image_18_06_2025_20_33_17.png?ex=6854350e&is=6852e38e&hm=2cb022c8af06b283a4738d38dfafad363571e6229dd30e983fc48ec08dbf05e2&"
             alt="GMC Taxi"
             className="w-full max-w-xs mx-auto drop-shadow-xl"
             draggable={false}

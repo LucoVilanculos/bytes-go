@@ -22,11 +22,11 @@ dotenv.config();
 const host = process.env.HOST || "http://localhost";
 const port = process.env.PORT || 3002;
 
-app.use("/auth", AuthRouter);
+app.use("/", AuthRouter);
 app.use("/reports", ReportRouter)
 app.use("/user", UserRouter);
 app.use("/faq", FaqRouter);
-app.use("/order", OrderRouter);
+app.use("/orders", OrderRouter);
 app.use("/car", CarstRouter);
 app.use("/tutorial", TutorialRouter);
 

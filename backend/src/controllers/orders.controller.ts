@@ -157,38 +157,39 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
 export const simulateTaxiOrder = async (req: Request, res: Response) => {
   try {
-    const {
-      driverLocation,
-      pickupLocation,
-      destination,
-      congestion = false
-    } = req.body;
-
-    if (!driverLocation || !pickupLocation || !destination) {
-      res.status(400).json({ message: "Missing required locations" });
-    } else {
-      const distDriverToClient = haversineDistance(driverLocation, pickupLocation);
-      const distClientToDest = haversineDistance(pickupLocation, destination);
-      const totalDistance = distDriverToClient + distClientToDest;
-
-      const fuelPrice = 90; 
-      const pricePerKm = 80; 
-      const congestionFactor = congestion ? 0.4 : 1; 
-
-      const basePrice = totalDistance * pricePerKm * congestionFactor;
-
-      const totalPrice = Math.round(basePrice);
-
-      res.json({
-        distance_km: Number(totalDistance.toFixed(2)),
-        fuel_price: fuelPrice,
-        congestion_factor: congestionFactor,
-        total_price: totalPrice
-      });
+    const { pickupLocation, destination } = req.body;
+    if (
+      !pickupLocation ||
+      !destination ||
+      typeof pickupLocation.lat !== "number" ||
+      typeof pickupLocation.lng !== "number" ||
+      typeof destination.lat !== "number" ||
+      typeof destination.lng !== "number"
+    ) {
+      res.status(400).json({ message: "Coordenadas inválidas." });
+      return;
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error simulating taxi order" });
+
+    const toRad = (v: number) => (v * Math.PI) / 180;
+    const R = 6371; // km
+    const dLat = toRad(destination.lat - pickupLocation.lat);
+    const dLng = toRad(destination.lng - pickupLocation.lng);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(pickupLocation.lat)) *
+        Math.cos(toRad(destination.lat)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    const base = 60;
+    const perKm = 20;
+    const total_price = Math.round(base + distance * perKm);
+
+     res.json({ total_price, distance: distance.toFixed(2) });
+  } catch (err) {
+     res.status(500).json({ message: "Erro ao simular preço." });
   }
 };
 

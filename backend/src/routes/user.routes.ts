@@ -7,15 +7,18 @@ import {
   forgotPassword,
   deleteUser,
   getAllUsers,
-} from "../controller/user.controller";
+  getUserById,
+} from "../controllers/user.controller";
 import { AuthenticationToken } from "../middleware/auth.Milddleware";
-import { authorizeRoles } from "../controller/transport.controller"; // Corrija o caminho se necessário
+import { authorizeRoles } from "../middleware/auth.Milddleware"
 
 export const UserRouter = Router();
 
 UserRouter.post("/register", register);
 
 UserRouter.get("/profile", AuthenticationToken, getMe);
+
+UserRouter.get("/id", AuthenticationToken,authorizeRoles("admin", "customer"), getUserById)
 
 UserRouter.get("/", AuthenticationToken, authorizeRoles("admin"), getAllUsers);
 

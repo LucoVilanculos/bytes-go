@@ -2,6 +2,8 @@ import { Request, Response,NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 import { UserProps, CarInfo, UserRole } from '../types/userprops'
 import { User } from '../models/user.models'
+import mongoose from 'mongoose'
+import { sendEmail } from "../utils/sendemail"
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -16,56 +18,42 @@ export const register = async (req: Request, res: Response) => {
       car
     } = req.body as UserProps & { car?: CarInfo };
 
-    // Checa se já existe usuário
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({ message: "There is already a user registered with this email." });
-      return;
-    }
-
-    // Validação comum
-    if (!name || !email || !password || !role || !phone || !bairro || !genero) {
+    } else if (!name || !email || !password || !role || !phone || !bairro || !genero) {
       res.status(400).json({ message: "Missing required fields." });
-      return;
+    } else if (role === "driver" && (
+      !car ||
+      !car.brand ||
+      !car.carModel ||
+      !car.year ||
+      !car.color ||
+      !car.plateNumber
+    )) {
+      res.status(400).json({ message: "Driver must provide all car details except imageUrl." });
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const userData: UserProps = {
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        phone,
+        bairro,
+        genero,
+        isActive: true,
+        car: role === "driver" ? car : undefined,
+      } as UserProps;
+
+      const user = await User.create(userData);
+
+
+      console.log("req.body:", req.body);
+
+      res.status(201).json({ message: "User created successfully", user });
     }
-
-    // Validação por role
-    if (role === "driver") {
-      if (
-        !car ||
-        !car.brand ||
-        !car.carModel ||
-        !car.year ||
-        !car.color ||
-        !car.plateNumber
-      ) {
-        res.status(400).json({ message: "Driver must provide all car details except imageUrl." });
-        return;
-      }
-    }
-
-    // Hash da senha
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Monta dados do usuário conforme o type
-    const userData: UserProps = {
-      name,
-      email,
-      password: hashedPassword,
-      role,
-      phone,
-      bairro,
-      genero,
-      isActive: true,
-      car: role === "driver" ? car : undefined,
-    } as UserProps;
-
-    const user = await User.create(userData);
-
-    // Mensagem de boas-vindas (simulação)
-    console.log(`Bem-vindo ao Bytes, ${name}! Email: ${email} ou WhatsApp: ${phone}`);
-
-    res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "An internal server error has occurred", error });
@@ -81,6 +69,27 @@ export const getMe =(req:Request,res:Response)=> {
     res.status(500).json({ message: "Error fetching user data" })
   }
 }
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      res.status(400).json({ message: "Invalid user id" });
+    }
+
+    const user = await User.findById(id).select("-password").populate("car");
+
+    if (!user) {
+     res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
@@ -133,15 +142,20 @@ export const patchUser = async (req: Request, res: Response) => {
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
-    const { email, newPassword } = req.body;
+    const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
       res.status(404).json({ message: "User not found" });
-    } else {
-      user.password = await bcrypt.hash(newPassword, 10);
-      await user.save();
-      res.status(200).json({ message: "Password updated successfully" });
+      return;
     }
+
+    const forgotPasswordToken = Math.random().toString(36).substring(2, 15);
+
+    user.forgotPasswordToken = forgotPasswordToken;
+    await user.save();
+
+
+    res.status(200).json({ message: "Password reset email sent" });
   } catch (error) {
     res.status(500).json({ message: "Error resetting password", error });
   }

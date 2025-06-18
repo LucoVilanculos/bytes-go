@@ -7,4 +7,10 @@ export interface OrderProps extends Document {
   total: number;
   createdAt?: Date;
   updatedAt?: Date;
+  driverLocation?: { lat: number; lng: number };
+  pickupLocation?: { lat: number; lng: number };
+  destination?: { lat: number; lng: number };
+  distance?: number;
+  fuelPrice?: number;
+  congestionFactor?: number;
 }

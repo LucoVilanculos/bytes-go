@@ -5,7 +5,7 @@ import {
   getFaqById,
   updateFaq,
   deleteFaq,
-} from "../controller/faq.controller";
+} from "../controllers/faq.controller";
 import { AuthenticationToken } from "../middleware/auth.Milddleware";
 
 export const FaqRouter = Router();

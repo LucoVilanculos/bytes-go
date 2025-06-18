@@ -21,3 +21,16 @@ export const AuthenticationToken = (req: Request, res: Response, next: NextFunct
     next(); 
   });
 };
+
+export const authorizeRoles = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const user = (req as any).user;
+
+    if (!user || !roles.includes(user.role)) {
+      res.status(403).json({ message: "Access denied. Role not authorized." });
+      return; 
+    }
+
+    next(); 
+  };
+};

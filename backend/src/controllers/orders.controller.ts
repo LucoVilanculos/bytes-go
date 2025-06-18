@@ -1,22 +1,53 @@
 import { Request, Response } from "express";
-import { Order } from "../models/oders.models"; 
 import mongoose from "mongoose";
+import { haversineDistance } from "../utils/geo";
+import { Order } from "../models/oders.models";
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const { user, items, total } = req.body;
+    const {
+      driverLocation,
+      pickupLocation,
+      destination,
+      congestion = false
+    } = req.body;
 
-    if (!user || !items || !total) {
-       res.status(400).json({ message: "Missing required fields" });
+    if (!driverLocation || !pickupLocation || !destination) {
+      res.status(400).json({ message: "Missing required locations" });
+    } else {
+      const distDriverToClient = haversineDistance(driverLocation, pickupLocation);
+      const distClientToDest = haversineDistance(pickupLocation, destination);
+      const totalDistance = distDriverToClient + distClientToDest;
+
+      const fuelPrice = 90;
+      const pricePerKm = 80;
+      const congestionFactor = congestion ? 1.4 : 1;
+      const basePrice = totalDistance * pricePerKm * congestionFactor;
+      const totalPrice = Math.round(basePrice);
+
+      const order = await Order.create({
+        user: (req as any).user.userId,
+        items: [], 
+        status: "pending",
+        total: totalPrice,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        driverLocation,
+        pickupLocation,
+        destination,
+        distance: Number(totalDistance.toFixed(2)),
+        fuelPrice,
+        congestionFactor
+      });
+
+      res.status(201).json({
+        message: "Pedido criado com sucesso!",
+        order
+      });
     }
-
-    const newOrder = new Order({ user, items, total });
-    const savedOrder = await newOrder.save();
-
-    res.status(201).json(savedOrder);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error creating order" });
+    res.status(500).json({ message: "Erro ao criar pedido", error });
   }
 };
 
@@ -123,3 +154,41 @@ export const cancelOrder = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error cancelling order" });
   }
 };
+
+export const simulateTaxiOrder = async (req: Request, res: Response) => {
+  try {
+    const {
+      driverLocation,
+      pickupLocation,
+      destination,
+      congestion = false
+    } = req.body;
+
+    if (!driverLocation || !pickupLocation || !destination) {
+      res.status(400).json({ message: "Missing required locations" });
+    } else {
+      const distDriverToClient = haversineDistance(driverLocation, pickupLocation);
+      const distClientToDest = haversineDistance(pickupLocation, destination);
+      const totalDistance = distDriverToClient + distClientToDest;
+
+      const fuelPrice = 90; 
+      const pricePerKm = 80; 
+      const congestionFactor = congestion ? 0.4 : 1; 
+
+      const basePrice = totalDistance * pricePerKm * congestionFactor;
+
+      const totalPrice = Math.round(basePrice);
+
+      res.json({
+        distance_km: Number(totalDistance.toFixed(2)),
+        fuel_price: fuelPrice,
+        congestion_factor: congestionFactor,
+        total_price: totalPrice
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error simulating taxi order" });
+  }
+};
+

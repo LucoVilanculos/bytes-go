@@ -4,7 +4,8 @@ import L from "leaflet";
 
 import { UseLocation } from "../hooks/uselocation";
 import { HaversineDistance } from "../context/haversine";
-//garante que o Pin de localização esteja presente
+
+// Garante que o Pin de localização esteja presente
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -14,24 +15,27 @@ L.Icon.Default.mergeOptions({
 });
 
 export const GeolocationPage = () => {
-  //pega a localização retornada no Hook UseLocation
   const location = UseLocation();
 
-  //se as coordenadas estiverem a processar mostra essa mensagem
   if (!location) {
     return <div>A carregar coordenadas...</div>;
   }
 
   return (
-    <div>
-      <h1>Minhas coordenadas</h1>
+    <div className=" rounded-xl shadow-lg p-4 w-full max-w-xl">
+      <h1 className="text-blue-900 font-bold mb-2">Minhas coordenadas</h1>
       <p>Latitude: {location.latitude}</p>
       <p>Longitude: {location.longitude}</p>
       <MapContainer
         center={[location.latitude, location.longitude]}
         zoom={13}
         scrollWheelZoom={true}
-        style={{ height: "400px", width: "100wh" }}
+        style={{
+          height: "320px",
+          width: "100%",
+          position: "relative",
+          zIndex: 1,
+        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -42,6 +46,7 @@ export const GeolocationPage = () => {
         </Marker>
       </MapContainer>
       <div>
+        Distância exemplo:{" "}
         {HaversineDistance(
           -25.8572288,
           32.620544,
@@ -52,4 +57,4 @@ export const GeolocationPage = () => {
       </div>
     </div>
   );
-}
+};

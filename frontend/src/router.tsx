@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
-import { About, Home,OrdersListPage, AdminTransportadoraPage, ErrorPage, UserDashboard, Login, RegisterPage, Account, Driver, ContactPage } from "./pages";
+import { SplashScreen } from "./components/splash";
+
+import { About, Home, OrdersListPage, AdminPage, ErrorPage, UserDashboard, Login, Register, Account, Driver, DriverAvenidasPage, ContactPage } from "./pages";
+
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
+import { Denuncia } from "./pages/denuncias";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -33,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <RegisterPage />,
+        element: <Register />,
       },
       {
         path: "/account",
@@ -45,7 +50,6 @@ const router = createBrowserRouter([
       },
       {
         path: "/driver",
-
         element: (
           <RequireAuth>
             <Driver />
@@ -53,9 +57,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-
-        path: "/shop",
-        element: <UserDashboard />,
+        path: "/user",
+        element: (
+          <RequireAuth>
+            <UserDashboard />
+          </RequireAuth>
+        ),
       },
       {
         path: "/orders",
@@ -69,22 +76,32 @@ const router = createBrowserRouter([
         path: "/admin",
         element: (
           <RequireAuth>
-            <AdminTransportadoraPage />
+            <AdminPage />
           </RequireAuth>
         ),
       },
       {
-        path: "/user",
-        element: <UserDashboard />,
-      },
-      {
         path: "/contacts",
         element: <ContactPage />,
+      },
+      {
+        path: "/denuncia",
+        element: <Denuncia />,
+      },
+      {
+        path: "/driver-avenidas",
+        element: <DriverAvenidasPage />,
       },
     ],
   },
 ]);
 
 export function Routes() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
   return <RouterProvider router={router} />;
 }

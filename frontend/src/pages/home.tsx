@@ -46,7 +46,7 @@ export const Home = () => {
           {[
             "https://cdn.discordapp.com/attachments/1381743102145986672/1384827186162438154/3271952.jpg?ex=6853d852&is=685286d2&hm=a124b56434bf4d2ab22a621732a6bb13584018bc6836e5e5cd74cf0670971d03&",
             "https://cdn.discordapp.com/attachments/1381743102145986672/1384827185814179941/uber-stats.png?ex=6853d851&is=685286d1&hm=504a6cffff36ae7ff45bb8834163b3839472573bdc49ec51eb539c926279d434&",
-            "https://cdn.discordapp.com/attachments/1361678570530803724/1384844706319437844/Screenshot_2025-06-18_102556.png?ex=6853e8a3&is=68529723&hm=8add3dfe105f85ab0507b0fb4f8540e84dcb089f0b7c01e191555e5789af7aac&0",
+            "https://cdn.discordapp.com/attachments/1363901798192120038/1384926762198237388/ChatGPT_Image_18_06_2025_20_33_17.png?ex=6854350e&is=6852e38e&hm=2cb022c8af06b283a4738d38dfafad363571e6229dd30e983fc48ec08dbf05e2&",
           ].map((img, index) => (
             <div
               key={index}
@@ -113,3 +113,4 @@ export const Home = () => {
     </>
   );
 };
+

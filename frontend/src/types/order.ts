@@ -31,5 +31,4 @@ export type CheckoutFormValues = {
   user: string;
   pickupLocation: { lat: number; lng: number };
   destination: { lat: number; lng: number };
-  // ...outros campos necessários
-};
+}

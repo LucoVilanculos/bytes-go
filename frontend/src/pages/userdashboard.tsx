@@ -6,6 +6,8 @@ import { GeolocationPage } from "../components/geolocation";
 import { motion } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { simulateTaxiOrder } from "../services/orders";
 
 const drivers = [
   { _id: "driverid1", name: "João Motorista" },
@@ -98,8 +100,14 @@ export const UserDashboard = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [creating, setCreating] = useState(false);
+  const [simulatedPrice, setSimulatedPrice] = useState<number | null>(null);
+  const [simulating, setSimulating] = useState(false);
 
   const [reportOpen, setReportOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const session = localStorage.getItem("session");
+  const user = session ? JSON.parse(session) : null;
 
   useEffect(() => {
     getOrders()
@@ -135,7 +143,7 @@ export const UserDashboard = () => {
         transition={{ duration: 0.7 }}
         className="text-3xl font-bold text-white text-center mb-8"
       >
-         Cliente
+        Bem-vindo{user ? `, ${user.name}` : ""}!
       </motion.h1>
 
       <motion.section
@@ -176,13 +184,43 @@ export const UserDashboard = () => {
                 onChange={(e) => setDestination(e.target.value)}
                 required
               />
-              <Button
-                type="submit"
-                className="bg-blue-900 text-white"
-                disabled={creating}
-              >
-                {creating ? "Criando..." : "Criar Viagem"}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  className="bg-blue-700 text-white"
+                  disabled={simulating || !pickup || !destination}
+                  onClick={async () => {
+                    setSimulating(true);
+                    try {
+                      // Use coordenadas reais se tiver, aqui é exemplo fixo
+                      const result = await simulateTaxiOrder({
+                        driverLocation: { lat: -25.9655, lng: 32.5832 },
+                        pickupLocation: { lat: -25.9655, lng: 32.5832 },
+                        destination: { lat: -25.9650, lng: 32.6000 },
+                      });
+                      setSimulatedPrice(result.total_price);
+                    } catch {
+                      setSimulatedPrice(null);
+                    } finally {
+                      setSimulating(false);
+                    }
+                  }}
+                >
+                  {simulating ? "Simulando..." : "Simular Preço"}
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-blue-900 text-white"
+                  disabled={creating}
+                >
+                  {creating ? "Criando..." : "Criar Viagem"}
+                </Button>
+              </div>
+              {simulatedPrice !== null && (
+                <div className="text-blue-900 font-bold">
+                  Preço estimado: MZN {simulatedPrice}
+                </div>
+              )}
             </form>
           </CardContent>
         </Card>
@@ -293,6 +331,19 @@ export const UserDashboard = () => {
           ))}
         </div>
       </motion.section>
+
+      <div className="fixed bottom-4 right-4">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={() => navigate("/denuncias")}
+        >
+          Denunciar
+        </button>
+      </div>
+
+      <div className="fixed bottom-20 right-4">
+        
+      </div>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export const RegisterDriverForm = () => {
     try {
       await createUser({ data: { ...data, role: "driver" } });
       toast.success("Profile created successfully");
-      window.location.href = "/login";
+      navigate("/driver-avenidas", { state: { fromRegister: true } });
     } catch (error) {
       toast.error("Error registering user. Please try again later.");
     }
@@ -65,7 +65,7 @@ export const RegisterDriverForm = () => {
             </p>
           </div>
           <img
-            src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=80"
+            src="https://cdn.discordapp.com/attachments/1363901798192120038/1384926762198237388/ChatGPT_Image_18_06_2025_20_33_17.png?ex=6854350e&is=6852e38e&hm=2cb022c8af06b283a4738d38dfafad363571e6229dd30e983fc48ec08dbf05e2&"
             alt="GMC Taxi"
             className="w-full max-w-xs drop-shadow-xl"
             draggable={false}

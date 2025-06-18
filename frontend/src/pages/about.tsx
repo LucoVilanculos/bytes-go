@@ -11,7 +11,7 @@ export const About = () => {
       </article>
       <div className="mt-14">
         <img className="w-130 h-80 mb-18" 
-          src="https://cdn.discordapp.com/attachments/1361678570530803724/1384844706319437844/Screenshot_2025-06-18_102556.png?ex=6853e8a3&is=68529723&hm=8add3dfe105f85ab0507b0fb4f8540e84dcb089f0b7c01e191555e5789af7aac&"
+          src="https://cdn.discordapp.com/attachments/1363901798192120038/1384926762198237388/ChatGPT_Image_18_06_2025_20_33_17.png?ex=6854350e&is=6852e38e&hm=2cb022c8af06b283a4738d38dfafad363571e6229dd30e983fc48ec08dbf05e2&"
           alt="showroom image"
         />
       </div>

@@ -16,6 +16,9 @@ export const Driver = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const session = localStorage.getItem("session");
+  const user = session ? JSON.parse(session) : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-4 font-mono">
       <motion.h1
@@ -24,7 +27,7 @@ export const Driver = () => {
         transition={{ duration: 0.7 }}
         className="text-3xl font-bold text-white text-center mb-8"
       >
-        Dashboard do Motorista
+        Bem-vindo{user ? `, ${user.name}` : ""} {user?.role === "admin" ? "(Administrador)" : user?.role === "driver" ? "(Motorista)" : ""}
       </motion.h1>
 
       <motion.section
@@ -53,7 +56,7 @@ export const Driver = () => {
           <CardContent>
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <img
-                src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=200&q=80"
+                src="https://images.unsplash.com/photo-1601919706273-88125e95ba71?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8R01DfGVufDB8fDB8fHww"
                 alt="Seu carro"
                 className="w-32 h-20 object-cover rounded shadow"
               />
@@ -103,6 +106,8 @@ export const Driver = () => {
           </div>
         )}
       </motion.section>
+
+
     </div>
   );
 };

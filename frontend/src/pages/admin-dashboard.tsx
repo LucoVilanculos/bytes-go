@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
-
-// Tipos
+import api from "../services/faqs"; 
+import { toast } from "react-hot-toast"; 
 type Report = {
   _id: string;
-  user: { name: string; email: string };
-  driver: { name: string; email: string };
+  reason: string;
   description: string;
+  status: string;
   createdAt: string;
+  reportedDriverId: { name: string; email: string };
+  passengerId: { name: string; email: string };
 };
 
 type Tutorial = {
@@ -24,50 +26,85 @@ type Driver = {
   status: "pending" | "approved" | "rejected";
 };
 
-// Mock de serviços (troque por API real)
-const fetchReports = async (): Promise<Report[]> => [
-  {
-    _id: "1",
-    user: { name: "Cliente 1", email: "cli1@email.com" },
-    driver: { name: "Motorista 1", email: "mot1@email.com" },
-    description: "Dirigiu perigosamente.",
-    createdAt: new Date().toISOString(),
-  },
-];
-const fetchTutorials = async (): Promise<Tutorial[]> => [
-  { _id: "1", title: "Como usar o app", content: "Baixe, registre-se e peça sua corrida!" },
-];
-const fetchDrivers = async (): Promise<Driver[]> => [
-  { _id: "1", name: "Motorista 1", email: "mot1@email.com", status: "pending" },
-];
-
-export const AdminTransportadoraPage = () => {
+export const AdminPage = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [newTutorial, setNewTutorial] = useState({ title: "", content: "" });
 
+  const session = localStorage.getItem("session");
+  const user = session ? JSON.parse(session) : null;
+
   useEffect(() => {
-    fetchReports().then(setReports);
-    fetchTutorials().then(setTutorials);
-    fetchDrivers().then(setDrivers);
+    api.get("/reports").then((res) => setReports(res.data)).catch(() => setReports([]));
+    api.get("/tutorials").then((res) => setTutorials(res.data)).catch(() => setTutorials([]));
+    api.get("/users?role=driver").then((res) => setDrivers(res.data)).catch(() => setDrivers([]));
   }, []);
 
-  // Handlers
-  const handleDeleteReport = (id: string) => setReports((r) => r.filter((rep) => rep._id !== id));
-  const handleDeleteTutorial = (id: string) => setTutorials((t) => t.filter((tt) => tt._id !== id));
-  const handleCreateTutorial = () => {
-    if (!newTutorial.title || !newTutorial.content) return;
-    setTutorials((t) => [
-      ...t,
-      { _id: Date.now().toString(), ...newTutorial },
-    ]);
-    setNewTutorial({ title: "", content: "" });
+  const handleDeleteReport = async (id: string) => {
+    try {
+      await api.delete(`/reports/${id}`);
+      setReports((r) => r.filter((rep) => rep._id !== id));
+      toast.success("Denúncia apagada com sucesso!");
+    } catch {
+      toast.error("Erro ao apagar denúncia.");
+    }
   };
-  const handleDriverStatus = (id: string, status: Driver["status"]) =>
-    setDrivers((d) =>
-      d.map((drv) => (drv._id === id ? { ...drv, status } : drv))
-    );
+
+  const handleDeleteTutorial = async (id: string) => {
+    try {
+      await api.delete(`/tutorials/${id}`);
+      setTutorials((t) => t.filter((tt) => tt._id !== id));
+      toast.success("Tutorial apagado com sucesso!");
+    } catch {
+      toast.error("Erro ao apagar tutorial.");
+    }
+  };
+
+  const handleCreateTutorial = async () => {
+    if (!newTutorial.title || !newTutorial.content) {
+      toast.error("Preencha todos os campos do tutorial!");
+      return;
+    }
+    try {
+      const session = localStorage.getItem("session");
+      const user = session ? JSON.parse(session) : null;
+      const tutorialData = {
+        ...newTutorial,
+        categoryId: "665f1e8e2b7e2e001e5d7b11", 
+        authorId: user?._id,
+      };
+      const res = await api.post("/tutorials", tutorialData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setTutorials((t) => [...t, res.data]);
+      setNewTutorial({ title: "", content: "" });
+      toast.success("Tutorial criado com sucesso!");
+    } catch (err: any) {
+      toast.error(
+        err?.response?.data?.message ||
+        "Erro ao criar tutorial. Verifique os campos e tente novamente."
+      );
+    }
+  };
+
+  const handleDriverStatus = async (id: string, status: Driver["status"]) => {
+    try {
+      await api.put(`/users/${id}`, { status });
+      setDrivers((d) =>
+        d.map((drv) => (drv._id === id ? { ...drv, status } : drv))
+      );
+      toast.success(
+        status === "approved"
+          ? "Motorista aprovado com sucesso!"
+          : "Motorista reprovado!"
+      );
+    } catch {
+      toast.error("Erro ao atualizar status do motorista.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-6 font-mono">
@@ -79,8 +116,10 @@ export const AdminTransportadoraPage = () => {
       >
         Painel Admin - Transportadora
       </motion.h1>
+      <h1 className="text-2xl font-bold text-white text-center mb-10">
+        Bem-vindo{user ? `, ${user.name}` : ""} {user?.role === "admin" ? "(Administrador)" : ""}
+      </h1>
 
-      {/* Denúncias */}
       <motion.section
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
@@ -96,11 +135,15 @@ export const AdminTransportadoraPage = () => {
               className="bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2"
             >
               <div>
-                <span className="font-bold text-blue-900">Cliente:</span> {rep.user.name} <br />
-                <span className="font-bold text-blue-900">Motorista:</span> {rep.driver.name}
+                <span className="font-bold text-blue-900">Passageiro:</span> {rep.passengerId?.name} <br />
+                <span className="font-bold text-blue-900">Motorista:</span> {rep.reportedDriverId?.name}
               </div>
+              <div className="text-blue-800">{rep.reason}</div>
               <div className="text-blue-800">{rep.description}</div>
               <div className="text-xs text-gray-400">{new Date(rep.createdAt).toLocaleString()}</div>
+              <div className="text-xs text-blue-700 font-semibold">
+                Status: {rep.status}
+              </div>
               <Button
                 className="w-fit bg-red-600 hover:bg-red-700 text-white mt-2"
                 onClick={() => handleDeleteReport(rep._id)}
@@ -115,7 +158,6 @@ export const AdminTransportadoraPage = () => {
         </div>
       </motion.section>
 
-      {/* Tutoriais */}
       <motion.section
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
@@ -166,7 +208,6 @@ export const AdminTransportadoraPage = () => {
         </div>
       </motion.section>
 
-      {/* Motoristas */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -221,6 +262,6 @@ export const AdminTransportadoraPage = () => {
       </motion.section>
     </div>
   );
-}
+};
 
 

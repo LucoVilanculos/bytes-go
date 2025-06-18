@@ -1,10 +1,12 @@
 export const About = () => {
   return (
      <div className="font-mono flex flex-col items-center">
-      <h1 className="text-[5rem] text-white font-mono">ABOUT US</h1>
+      <h1 className="text-[5rem] text-white font-mono">Sobre nós </h1>
       <article className="text-md mt-14 font-mono font-medium text-white p-4">
-        <h1>B4F E-commerce is a factory brand, produced by the world's best maker </h1>
-        <h1>of fleece fabric and apparel, Xipamanine Mozambique.</h1>
+        <h1 className="font-semibold uppercase text-black">BytesGo Mobilidade que te move!</h1>
+        <p className=" text-lg space-y-3 font-semibold text-black">A BytesGo é mais do que uma empresa de transporte,  <br />somos uma solução moderna, segura e eficiente para  <br /> quem precisa se mover com liberdade e confiança. <br /> Nascemos com o objetivo de transformar a mobilidade <br /> urbana, conectando passageiros e motoristas com  <br />tecnologia de ponta e atendimento de qualidade.</p>
+      <p className=" text-lg space-y-3 font-semibold text-black">Nosso compromisso é oferecer uma experiência de transporte <br /> acessível, confortável e confiável. Valorizamos o tempo dos  <br />nossos clientes, por isso investimos em inovação, agilidade <br /> e um suporte sempre presente.</p>
+     
       </article>
       <div className="mt-14">
         <img className="w-130 h-80 mb-18" 

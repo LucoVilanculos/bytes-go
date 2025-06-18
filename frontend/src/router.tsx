@@ -45,6 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/driver",
+
         element: (
           <RequireAuth>
             <Driver />
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
         ),
       },
       {
+
         path: "/shop",
         element: <UserDashboard />,
       },

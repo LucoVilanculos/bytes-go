@@ -1,0 +1,147 @@
+import { Button } from '../../ui/button'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../../ui/card'
+import { Input } from '../../ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../../ui/form'
+import toast, { Toaster } from 'react-hot-toast'
+import { login } from '../../../services/auth'
+import { motion } from "framer-motion"
+import { ArrowLeft } from "lucide-react"
+
+const FormSchema = z.object({
+   email: z
+        .string({ required_error: 'Email is required' })
+        .email('Invalid email'),
+    password: z
+        .string({ required_error: 'Password is required' })
+        .min(6, 'Password must be at least 6 characters long')
+        .max(20, 'Password must be at most 20 characters long'),
+})
+
+export const LoginForm = () => {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  })
+  const navigate = useNavigate();
+
+  async function onSubmit(user: z.infer<typeof FormSchema>) {
+    try {
+      await login({ email: user.email, password: user.password });
+      toast.success('Login successful!', { id: "1" });
+      window.location.href = '/';
+    } catch (error) {
+      toast.error("Incorrect Email or Password. Please check your credentials.", { id: "1" });
+    }
+  }
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-2">
+      <div className="flex flex-col md:flex-row-reverse w-full max-w-4xl bg-white/90 rounded-xl shadow-2xl overflow-hidden">
+        <div className="flex flex-col justify-between items-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 md:w-1/2 w-full p-8 relative">
+          <div className="w-full">
+            <h1 className="text-4xl font-bold text-white text-center drop-shadow mb-2">BYTES-GO</h1>
+            <p className="text-blue-100 text-center text-lg font-light mb-8">
+              Bem-vindo de volta! Faça login para acessar sua conta e aproveitar a melhor experiência de mobilidade urbana.
+            </p>
+          </div>
+          <img
+            src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=80"
+            alt="GMC Taxi"
+            className="w-full max-w-xs mx-auto drop-shadow-xl"
+            draggable={false}
+          />
+        </div>
+        <motion.div
+          initial={{ opacity: 0, x: -60, scale: 0.95 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="w-full md:w-1/2 flex flex-col justify-center p-8"
+        >
+          <button
+            className="mb-4 flex items-center text-blue-900 hover:text-blue-700 transition w-fit"
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Voltar"
+          >
+            <ArrowLeft className="w-5 h-5 mr-1" />
+            Voltar
+          </button>
+          <Card className="w-full font-mono shadow-none border-none bg-transparent">
+            <CardHeader>
+              <CardTitle className='font-light text-2xl text-center text-blue-900'>LOGIN</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex-col gap-2 text-center">
+                    <Toaster />
+                    <Button type="submit" className="w-full">Sign In</Button>
+                  </div>
+                </form>
+              </Form>
+              <CardAction className="w-full text-center pt-1">
+                <p className="text-sm">
+                  Não tem uma conta?
+                  <Link
+                    to="/register"
+                    className="text-blue-900 hover:underline pl-1 "
+                  >
+                    Clique aqui para registrar
+                  </Link>
+                </p>
+              </CardAction>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
+  )
+}

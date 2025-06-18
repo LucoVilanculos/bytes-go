@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
-import { About, Home, OrdersUser, CheckoutPage, AdminPage, ErrorPage, Products, Login, Register, Account, Details, ContactPage } from "./pages";
+import { About, Home, OrdersUser, AdminPage, ErrorPage, Products, Login, RegisterPage, Account, Driver, ContactPage } from "./pages";
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
 
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <Register />,
+        element: <RegisterPage />,
       },
       {
         path: "/account",
@@ -47,21 +47,13 @@ const router = createBrowserRouter([
         path: "/checkout",
         element: (
           <RequireAuth>
-            <CheckoutPage />
+            < Driver/>
           </RequireAuth>
         ),
       },
       {
         path: "/shop",
         element: <Products />,
-      },
-      {
-        path: "/details/:id",
-        element: <Details />,
-      },
-      {
-        path: "/product/:id",
-        element: <Details />,
       },
       {
         path: "/orders",

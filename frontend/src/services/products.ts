@@ -1,4 +1,4 @@
-import api from "./axios-instance";
+import api from "./faqs";
 import type { Product } from "../types/products";
 
 export async function getProductsById(id: string): Promise<Product | undefined> {

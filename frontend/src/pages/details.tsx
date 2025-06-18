@@ -7,13 +7,13 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../com
 import type { Product } from "../types/products";
 
 
-export const Details = () => {
+export const Driver = () => {
 
 
   return (
     <>
       <h1 className="text-3xl font-bold text-center my-8">
-        Details Page
+        Driver Page
       </h1>
     </>
   

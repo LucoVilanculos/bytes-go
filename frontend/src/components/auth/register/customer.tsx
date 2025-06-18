@@ -1,13 +1,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { z } from "zod";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+
+
 import { createUser } from "../../../services/users";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../ui/form";
-import { toast, Toaster } from "react-hot-toast";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
 const CustomerSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -26,6 +30,8 @@ export const RegisterCustomerForm = () => {
   const form = useForm<z.infer<typeof CustomerSchema>>({
     resolver: zodResolver(CustomerSchema),
   });
+
+  const navigate = useNavigate();
 
   async function onSubmit(data: z.infer<typeof CustomerSchema>) {
     try {
@@ -61,6 +67,15 @@ export const RegisterCustomerForm = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-full md:w-1/2 flex flex-col justify-center p-8 bg-white"
         >
+          <button
+            className="mb-4 flex items-center text-blue-900 hover:text-blue-700 transition w-fit"
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Voltar"
+          >
+            <ArrowLeft className="w-5 h-5 mr-1" />
+            Voltar
+          </button>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField control={form.control} name="name" render={({ field }) => (

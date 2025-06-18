@@ -1,175 +1,74 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-import type { OrderProps } from "../types/order"
-import { getMyOrders } from "./../services/admin"
+import { getOrders } from "../services/orders";
+import type { OrderProps } from "../types/order";
+import { CardContent, CardTitle } from "../components/ui/card";
 
-export const OrdersUser = () => {
-  const [orders, setOrders] = useState<OrderProps[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export const OrdersListPage = () => {
+  const [orders, setOrders] = useState<OrderProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [checked, setChecked] = useState<{ [id: string]: boolean }>({});
 
   useEffect(() => {
-    let ignore = false
+    getOrders()
+      .then(setOrders)
+      .finally(() => setLoading(false));
+  }, []);
 
-    const fetchOrders = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const data = await getMyOrders()
-
-        if (!ignore) {
-          if (typeof data === "string") {
-            setError(data)
-            setOrders([])
-          } else if (Array.isArray(data)) {
-            setOrders(data)
-          } else if (data.orders && Array.isArray(data.orders)) {
-            setOrders(data.orders)
-          } else {
-            console.warn("Invalid API response format:", data)
-            setOrders([])
-          }
-        }
-      } catch (err) {
-        if (!ignore) {
-          const errorMessage = err instanceof Error ? err.message : "Failed to fetch orders"
-          console.error("Error fetching orders:", err)
-          setError(errorMessage)
-          setOrders([])
-        }
-      } finally {
-        if (!ignore) {
-          setLoading(false)
-        }
-      }
-    }
-
-    fetchOrders()
-
-    return () => {
-      ignore = true
-    }
-  }, [])
-
-  const handleRetry = async () => {
-    setError(null)
-    setLoading(true)
-
-    try {
-      const data = await getMyOrders()
-
-      if (typeof data === "string") {
-        setError(data)
-        setOrders([])
-      } else if (Array.isArray(data)) {
-        setOrders(data)
-      } else if (data.orders && Array.isArray(data.orders)) {
-        setOrders(data.orders)
-      } else {
-        setOrders([])
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch orders"
-      setError(errorMessage)
-      setOrders([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-blue-600 text-center mb-4">My Orders</h2>
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-2 text-muted-foreground">Loading orders...</span>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-blue-600 text-center mb-4">My Orders</h2>
-        <div className="text-center py-8">
-          <div className="text-red-600 mb-4">
-            <p className="font-semibold">Failed to load orders</p>
-            <p className="text-sm">{error}</p>
-          </div>
-          <button
-            onClick={handleRetry}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    )
-  }
+  const handleCheck = (id: string) => {
+    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold text-blue-600 text-center mb-4">My Orders</h2>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-4 font-mono">
+      <motion.h1
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="text-3xl font-bold text-white text-center mb-8"
+      >
+        Todas as Corridas
+      </motion.h1>
 
-      {orders.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-muted-foreground mb-4">No orders found.</p>
-          <button
-            onClick={handleRetry}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-          >
-            Refresh
-          </button>
-        </div>
+      {loading ? (
+        <div className="text-white text-center">Carregando...</div>
+      ) : orders.length === 0 ? (
+        <div className="text-blue-100 text-center">Nenhuma corrida encontrada.</div>
       ) : (
-        <div className="space-y-3">
-          <div className="flex justify-between items-center mb-4">
-            <p className="text-sm text-muted-foreground">
-              {orders.length} order{orders.length !== 1 ? "s" : ""} found
-            </p>
-            <button onClick={handleRetry} className="text-sm text-blue-600 hover:text-blue-700 transition-colors">
-              Refresh
-            </button>
-          </div>
-
-          <ul className="space-y-3">
-            {orders.map((order) => (
-              <li
-                key={order.orderId}
-                className="border rounded-lg p-4 shadow-sm bg-white hover:shadow-md transition-shadow"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="font-semibold text-gray-900">{order.customerName}</div>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      order.status === "delivered"
-                        ? "bg-green-100 text-green-800"
-                        : order.status === "pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : order.status === "cancelled"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          {orders.map((order) => (
+            <motion.div
+              key={order._id}
+              whileHover={{ scale: 1.03 }}
+              className="bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2"
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={!!checked[order._id]}
+                  onChange={() => handleCheck(order._id)}
+                  className="accent-blue-900 w-5 h-5"
+                />
+                <CardTitle className="text-blue-900 text-lg">
+                  {order.user?.name || "Cliente"}
+                </CardTitle>
+              </div>
+              <CardContent className="pl-8">
+                <div className="text-blue-800">
+                  Status: <span className="font-semibold">{order.status}</span>
                 </div>
-
-                <div className="text-lg font-semibold text-blue-600 mb-1">
-                  {order.totalAmount.toLocaleString("en-US")} MZN
+                <div className="text-blue-800">
+                  Total: <span className="font-semibold">MZN {order.total?.toFixed(2)}</span>
                 </div>
-
-                <div className="text-sm text-muted-foreground">
-                  Order #{order.orderId} • {new Date(order.createdAt).toLocaleString("en-US")}
+                <div className="text-xs text-gray-400">
+                  {order.createdAt && new Date(order.createdAt).toLocaleString()}
                 </div>
-              </li>
-            ))}
-          </ul>
+              </CardContent>
+            </motion.div>
+          ))}
         </div>
       )}
     </div>
-  )
+  );
 }

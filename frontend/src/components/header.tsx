@@ -5,7 +5,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Button } from "./ui/button";
-import { getProducts } from "../services/products";
 import type { Product } from "../types/products";
 
 import {
@@ -32,7 +31,8 @@ export function Header() {
   ];
 
   // Buscar sugestões
-  useEffect(() => {
+  /*
+    useEffect(() => {
     const fetchSuggestions = async () => {
       if (search.length < 2) {
         setSuggestions([]);
@@ -55,6 +55,7 @@ export function Header() {
     };
     fetchSuggestions();
   }, [search]);
+  */ 
 
   // Fechar barra de busca ao clicar fora
   useEffect(() => {

@@ -1,3 +1,11 @@
+import { ArrowLeft } from "lucide-react"
+import { motion } from "framer-motion"
+import { Link, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+
 import { Button } from '../../ui/button'
 import {
   Card,
@@ -7,10 +15,6 @@ import {
   CardTitle,
 } from '../../ui/card'
 import { Input } from '../../ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 import {
   Form,
   FormControl,
@@ -21,8 +25,7 @@ import {
 } from '../../ui/form'
 import toast, { Toaster } from 'react-hot-toast'
 import { login } from '../../../services/auth'
-import { motion } from "framer-motion"
-import { ArrowLeft } from "lucide-react"
+
 
 const FormSchema = z.object({
    email: z

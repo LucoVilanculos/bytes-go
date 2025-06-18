@@ -1,13 +1,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+
+
 import { createUser } from "../../../services/users";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../ui/form";
-import { toast, Toaster } from "react-hot-toast";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
 const CarSchema = z.object({
   brand: z.string().min(1, "Marca obrigatória"),
@@ -32,10 +36,13 @@ const DriverSchema = z.object({
   path: ["confirmPassword"],
 });
 
+
 export const RegisterDriverForm = () => {
   const form = useForm<z.infer<typeof DriverSchema>>({
     resolver: zodResolver(DriverSchema),
   });
+
+  const navigate = useNavigate();
 
   async function onSubmit(data: z.infer<typeof DriverSchema>) {
     try {
@@ -70,7 +77,15 @@ export const RegisterDriverForm = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-full md:w-1/2 flex flex-col justify-center p-8"
         >
-          
+          <button
+            className="mb-4 flex items-center text-blue-900 hover:text-blue-700 transition w-fit"
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Voltar"
+          >
+            <ArrowLeft className="w-5 h-5 mr-1" />
+            Voltar
+          </button>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField control={form.control} name="name" render={({ field }) => (

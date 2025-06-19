@@ -44,7 +44,17 @@ export const RegisterDriverForm = () => {
 
   async function onSubmit(data: z.infer<typeof DriverSchema>) {
     try {
-      await createUser({ data: { ...data, role: "driver" } });
+      await createUser({
+        data: {
+          ...data,
+          role: "driver",
+          car: {
+            model: data.car.carModel,
+            plate: data.car.plateNumber,
+            color: data.car.color,
+          },
+        },
+      });
       toast.success("Profile created successfully");
       navigate("/driver-avenidas", { state: { fromRegister: true } });
     } catch (error) {

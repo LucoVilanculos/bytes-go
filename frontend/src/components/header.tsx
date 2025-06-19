@@ -23,7 +23,6 @@ export function Header() {
     { label: "Sobre", href: "/about" },
   ];
 
-  // Verifica se está logado
   const session = localStorage.getItem("session");
   const user = session ? JSON.parse(session) : null;
   const isLogged = !!user;
@@ -34,7 +33,7 @@ export function Header() {
     navigate("/login");
   }
 
-  function handleInicio() {
+  /*function handleInicio() {
     if (user?.role === "admin") {
       navigate("/admin");
     } else if (user?.role === "driver") {
@@ -44,7 +43,7 @@ export function Header() {
     } else {
       navigate("/");
     }
-  }
+  }*/
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -63,15 +62,14 @@ export function Header() {
   return (
     <header className="fixed top-0 w-full bg-white dark:bg-gray-900 z-50 border-b shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4 md:py-6 md:px-6">
-        {/* Esquerda - Links (desktop) */}
         <nav className="gap-8 text-sm flex-1 hidden md:flex">
-          <Button
+          {/*<Button
             variant="ghost"
             className="text-sm font-normal"
             onClick={handleInicio}
           >
             Início
-          </Button>
+          </Button>*/}
           {linksLeft.map((link) => (
             <NavLink
               key={link.label}
@@ -85,12 +83,10 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Centro - Logo */}
         <div className="text-lg font-bold tracking-widest uppercase flex-1 text-center">
           <NavLink to="/">Bytes-GO</NavLink>
         </div>
 
-        {/* Direita - Links e ações (desktop) */}
         <nav className="items-center gap-4 text-sm flex-1 justify-end hidden md:flex">
           <Button
             variant="ghost"
@@ -123,7 +119,6 @@ export function Header() {
             </Button>
           )}
 
-          {/* Botão Dark Mode */}
           <Button
             variant="ghost"
             size="icon"
@@ -135,9 +130,7 @@ export function Header() {
           </Button>
         </nav>
 
-        {/* Direita - Menu mobile (só aparece no mobile) */}
         <div className="md:hidden flex items-center flex-1 justify-end gap-2">
-          {/* Botão Dark Mode no mobile */}
           <button
             onClick={toggle}
             aria-label="Alternar dark mode"
@@ -155,7 +148,6 @@ export function Header() {
         </div>
       </div>
 
-      {/* Barra de busca */}
       <AnimatePresence>
         {showSearchBar && (
           <motion.div
@@ -181,7 +173,6 @@ export function Header() {
         )}
       </AnimatePresence>
 
-      {/* Menu mobile */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -234,7 +225,6 @@ export function Header() {
                   Sair
                 </Button>
               )}
-              {/* Botão Dark Mode no menu mobile */}
               <Button
                 variant="ghost"
                 size="icon"

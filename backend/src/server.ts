@@ -16,7 +16,7 @@ import { ReportRouter } from "./routes/report.routes";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5002" }));
 dotenv.config();
 
 const host = process.env.HOST || "http://localhost";

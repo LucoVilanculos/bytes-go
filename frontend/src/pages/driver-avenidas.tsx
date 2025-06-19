@@ -122,7 +122,7 @@ export const DriverAvenidasPage = () => {
   }, [finalizado, isRegister, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-6 font-mono">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 dark:from-[#181f3a] dark:via-[#22305a] dark:to-[#2b4170] p-6 font-mono">
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -149,11 +149,11 @@ export const DriverAvenidasPage = () => {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
               transition={{ duration: 0.2 }}
-              className="block bg-white rounded-xl shadow-lg p-4 border-l-4 border-blue-700 hover:bg-blue-50"
+              className="block bg-white dark:bg-[#232c47] rounded-xl shadow-lg p-4 border-l-4 border-blue-700 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-[#28335a] dark:text-white"
             >
-              <div className="font-bold text-blue-900 text-lg">{tut.titulo}</div>
-              <div className="text-blue-800">{tut.descricao}</div>
-              <div className="text-xs text-blue-700 mt-2">
+              <div className="font-bold text-blue-900 dark:text-blue-100 text-lg">{tut.titulo}</div>
+              <div className="text-blue-800 dark:text-blue-200">{tut.descricao}</div>
+              <div className="text-xs text-blue-700 dark:text-blue-300 mt-2">
                 URL: <span className="underline">{window.location.origin + tut.url}</span>
               </div>
             </motion.a>
@@ -166,15 +166,15 @@ export const DriverAvenidasPage = () => {
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="max-w-xl mx-auto bg-white/90 rounded-xl shadow-lg p-6"
+        className="max-w-xl mx-auto bg-white/90 dark:bg-[#232c47] rounded-xl shadow-lg p-6 dark:text-white"
       >
-        <h2 className="text-xl font-semibold text-blue-900 mb-4 text-center">Quiz das Avenidas</h2>
+        <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-4 text-center">Quiz das Avenidas</h2>
         {!finalizado ? (
           <>
-            <div className="mb-4 text-blue-900 font-bold">
+            <div className="mb-4 text-blue-900 dark:text-blue-100 font-bold">
               Pergunta {quizStep + 1} de {quiz.length}
             </div>
-            <div className="mb-6 text-blue-800 font-semibold">
+            <div className="mb-6 text-blue-800 dark:text-blue-200 font-semibold">
               {quiz[quizStep].pergunta}
             </div>
             <div className="flex flex-col gap-3">
@@ -186,11 +186,11 @@ export const DriverAvenidasPage = () => {
                   className={`px-4 py-2 rounded border text-left transition font-bold ${
                     respostaSelecionada
                       ? opcao === quiz[quizStep].resposta
-                        ? "bg-green-200 border-green-600 text-green-900"
+                        ? "bg-green-200 border-green-600 text-green-900 dark:bg-green-700 dark:border-green-400 dark:text-white"
                         : opcao === respostaSelecionada
-                        ? "bg-red-200 border-red-600 text-red-900"
-                        : "bg-gray-100 border-gray-300 text-gray-500"
-                      : "bg-blue-100 border-blue-400 text-blue-900 hover:bg-blue-200"
+                        ? "bg-red-200 border-red-600 text-red-900 dark:bg-red-700 dark:border-red-400 dark:text-white"
+                        : "bg-gray-100 border-gray-300 text-gray-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                      : "bg-blue-100 border-blue-400 text-blue-900 hover:bg-blue-200 dark:bg-[#28335a] dark:border-blue-400 dark:text-blue-100 dark:hover:bg-[#2b4170]"
                   }`}
                   disabled={!!respostaSelecionada}
                   onClick={() => handleResponder(opcao)}
@@ -206,14 +206,14 @@ export const DriverAvenidasPage = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center"
           >
-            <div className="text-2xl font-bold text-blue-900 mb-2">
+            <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 mb-2">
               Quiz finalizado!
             </div>
-            <div className="text-blue-800 mb-4">
+            <div className="text-blue-800 dark:text-blue-200 mb-4">
               Você acertou {acertos} de {quiz.length} perguntas.
             </div>
             <Button
-              className="bg-blue-900 text-white px-6 py-2 rounded font-bold"
+              className="bg-blue-900 dark:bg-blue-700 text-white px-6 py-2 rounded font-bold"
               onClick={() => navigate("/driver")}
             >
               Ir para o Dashboard

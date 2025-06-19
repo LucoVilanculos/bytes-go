@@ -2,12 +2,10 @@ import { useState } from "react";
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from "react-router-dom";
 import { SplashScreen } from "./components/splash";
 
-<<<<<<< HEAD
-import { About, Home,  AdminPage, ErrorPage,  Login,  Account, Driver, ContactPage } from "./pages";
-import { Register } from "./pages/register";
-=======
+
+
 import { About, Home, OrdersListPage, AdminPage, ErrorPage, UserDashboard, Login, Register, Account, Driver, DriverAvenidasPage, ContactPage } from "./pages";
->>>>>>> dev-luco
+
 
 import { MainLayout } from "./layout/main-layout";
 import type { JSX } from "react";
@@ -45,7 +43,6 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
-<<<<<<< HEAD
     {
       path: "/account",
       element: (
@@ -62,13 +59,11 @@ const router = createBrowserRouter([
         </RequireAuth>
       ),
     },
-      
-=======
       {
-        path: "/account",
+        path: "/user",
         element: (
           <RequireAuth>
-            <Account />
+            <UserDashboard />
           </RequireAuth>
         ),
       },
@@ -82,11 +77,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user",
-        element: (
-          <RequireAuth>
-            <UserDashboard />
-          </RequireAuth>
-        ),
+        element: <Navigate to="/account" replace />,
       },
       {
         path: "/orders",
@@ -104,7 +95,6 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
->>>>>>> dev-luco
       {
         path: "/contacts",
         element: <ContactPage />,

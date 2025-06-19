@@ -2,12 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Command,
   CommandInput,
 } from "../components/ui/command";
+import { useDarkMode } from "../context/DarkModeContext";
 
 export function Header() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -15,6 +16,7 @@ export function Header() {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { dark, toggle } = useDarkMode();
 
   const linksLeft = [
     { label: "Contato", href: "/contacts" },
@@ -38,13 +40,12 @@ export function Header() {
     } else if (user?.role === "driver") {
       navigate("/driver");
     } else if (user?.role === "customer" || user?.role === "user") {
-      navigate("/user");
+      navigate("/account");
     } else {
       navigate("/");
     }
   }
 
-  // Fechar barra de busca ao clicar fora
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -60,9 +61,10 @@ export function Header() {
   }, [showSearchBar]);
 
   return (
-    <header className="fixed top-0 w-full bg-white z-50 border-b shadow-sm">
+    <header className="fixed top-0 w-full bg-white dark:bg-gray-900 z-50 border-b shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4 md:py-6 md:px-6">
-        <nav className="hidden md:flex gap-8 text-sm">
+        {/* Esquerda - Links (desktop) */}
+        <nav className="gap-8 text-sm flex-1 hidden md:flex">
           <Button
             variant="ghost"
             className="text-sm font-normal"
@@ -83,11 +85,13 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="text-lg font-bold tracking-widest uppercase absolute left-1/2 -translate-x-1/2">
+        {/* Centro - Logo */}
+        <div className="text-lg font-bold tracking-widest uppercase flex-1 text-center">
           <NavLink to="/">Bytes-GO</NavLink>
         </div>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm ml-auto">
+        {/* Direita - Links e ações (desktop) */}
+        <nav className="items-center gap-4 text-sm flex-1 justify-end hidden md:flex">
           <Button
             variant="ghost"
             size="sm"
@@ -98,15 +102,17 @@ export function Header() {
             Buscar
           </Button>
 
-          <NavLink
-            to="/account"
-            className={({ isActive }) =>
-              `transition hover:opacity-60 ${isActive ? "font-semibold" : ""}`
-            }
-            aria-label="Conta"
-          >
-            Conta
-          </NavLink>
+          {isLogged && (
+            <NavLink
+              to="/account"
+              className={({ isActive }) =>
+                `transition hover:opacity-60 ${isActive ? "font-semibold" : ""}`
+              }
+              aria-label="Conta"
+            >
+              Conta
+            </NavLink>
+          )}
 
           {isLogged && (
             <Button
@@ -116,19 +122,40 @@ export function Header() {
               Sair
             </Button>
           )}
+
+          {/* Botão Dark Mode */}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Alternar dark mode"
+            onClick={toggle}
+            className="ml-2"
+          >
+            {dark ? <Sun size={22} /> : <Moon size={22} />}
+          </Button>
         </nav>
 
-        <div className="md:hidden w-full flex items-center justify-end text-base">
+        {/* Direita - Menu mobile (só aparece no mobile) */}
+        <div className="md:hidden flex items-center flex-1 justify-end gap-2">
+          {/* Botão Dark Mode no mobile */}
           <button
-            onClick={() => setIsMobileOpen((prev) => !prev)}
-            className="p-2"
+            onClick={toggle}
+            aria-label="Alternar dark mode"
+            className="p-2 rounded focus:outline-none"
+          >
+            {dark ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+          <button
+            onClick={() => setIsMobileOpen((v) => !v)}
+            className="p-2 rounded focus:outline-none"
             aria-label="Abrir menu"
           >
-            {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
+            <Menu size={28} />
           </button>
         </div>
       </div>
 
+      {/* Barra de busca */}
       <AnimatePresence>
         {showSearchBar && (
           <motion.div
@@ -137,7 +164,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="w-full bg-white shadow-md border-b px-4 md:px-6 py-4"
+            className="w-full bg-white dark:bg-gray-900 shadow-md border-b px-4 md:px-6 py-4"
             style={{ position: "relative", zIndex: 60 }}
           >
             <div className="max-w-7xl mx-auto">
@@ -163,16 +190,23 @@ export function Header() {
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.25 }}
             className="md:hidden fixed inset-0 z-40 bg-black/90 text-white px-6 py-6"
-            style={{ right: 0, left: "auto" }} // Garante que o menu venha da direita
+            style={{ right: 0, left: "auto" }}
           >
             <div className="flex items-center justify-between mb-6">
+              <span className="uppercase font-bold tracking-wider">BYTES-GO</span>
               <button onClick={() => setIsMobileOpen(false)} aria-label="Fechar menu">
                 <X size={28} />
               </button>
-              <span className="uppercase font-bold tracking-wider">BYTES-GO</span>
             </div>
             <nav className="flex flex-col gap-6 text-lg font-mono">
-              {[...linksLeft, { label: "Conta", href: "/account" }].map((link) => (
+              <NavLink
+                to="/"
+                onClick={() => setIsMobileOpen(false)}
+                className="hover:opacity-70"
+              >
+                Início
+              </NavLink>
+              {linksLeft.map((link) => (
                 <NavLink
                   key={link.label}
                   to={link.href}
@@ -182,6 +216,13 @@ export function Header() {
                   {link.label}
                 </NavLink>
               ))}
+              <NavLink
+                to="/account"
+                onClick={() => setIsMobileOpen(false)}
+                className="hover:opacity-70"
+              >
+                Conta
+              </NavLink>
               {isLogged && (
                 <Button
                   onClick={() => {
@@ -193,6 +234,16 @@ export function Header() {
                   Sair
                 </Button>
               )}
+              {/* Botão Dark Mode no menu mobile */}
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Alternar dark mode"
+                onClick={toggle}
+                className="mt-4"
+              >
+                {dark ? <Sun size={22} /> : <Moon size={22} />}
+              </Button>
             </nav>
           </motion.div>
         )}

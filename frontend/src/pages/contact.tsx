@@ -35,7 +35,7 @@ export function ContactPage() {
         </section>
 
         {/* Formulário */}
-        <Card className="w-full max-w-md shadow-2xl border-none bg-white/90">
+        <Card className="w-full max-w-md shadow-2xl border-none bg-white/90 dark:bg-[#232c47] dark:text-white">
           <CardContent>
             <form onSubmit={handleSubmit} className="py-4">
               <div className="flex flex-col gap-5">
@@ -47,7 +47,7 @@ export function ContactPage() {
                     id="name"
                     type="text"
                     required
-                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white"
+                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white dark:bg-[#28335a] dark:text-white dark:border-blue-400"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -58,7 +58,7 @@ export function ContactPage() {
                     id="email"
                     type="email"
                     required
-                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white"
+                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white dark:bg-[#28335a] dark:text-white dark:border-blue-400"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -68,7 +68,7 @@ export function ContactPage() {
                   <Input
                     id="phoneNumber"
                     type="text"
-                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white"
+                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white dark:bg-[#28335a] dark:text-white dark:border-blue-400"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -78,7 +78,7 @@ export function ContactPage() {
                   <Input
                     id="location"
                     type="text"
-                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white"
+                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white dark:bg-[#28335a] dark:text-white dark:border-blue-400"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -89,7 +89,7 @@ export function ContactPage() {
                     id="subject"
                     type="text"
                     required
-                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white"
+                    className="rounded-md border border-blue-700 focus:ring-2 focus:ring-blue-400 bg-white dark:bg-[#28335a] dark:text-white dark:border-blue-400"
                   />
                 </div>
                 <div className="grid gap-2">

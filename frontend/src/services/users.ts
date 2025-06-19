@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { UserProps } from "../types/users";
+import type { UserProps } from "../types/user";
 
 const BASE_URL = import.meta.env.VITE_HOST;
 

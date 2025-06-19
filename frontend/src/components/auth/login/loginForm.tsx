@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-
 import { Button } from '../../ui/button'
 import {
   Card,
@@ -25,7 +24,6 @@ import {
 } from '../../ui/form'
 import toast, { Toaster } from 'react-hot-toast'
 import { login } from '../../../services/auth'
-
 
 const FormSchema = z.object({
    email: z
@@ -59,7 +57,6 @@ export const LoginForm = () => {
       if (role === "admin") {
         navigate("/admin");
       } else if (role === "driver") {
-        // Redireciona para o quiz/tutorial das avenidas, permitindo pular
         navigate("/driver-avenidas");
       } else {
         navigate("/user");
@@ -69,9 +66,9 @@ export const LoginForm = () => {
     }
   }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-2">
-      <div className="flex flex-col md:flex-row-reverse w-full max-w-4xl bg-white/90 rounded-xl shadow-2xl overflow-hidden">
-        <div className="flex flex-col justify-between items-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 md:w-1/2 w-full p-8 relative">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 dark:from-[#181f3a] dark:via-[#22305a] dark:to-[#2b4170] p-2">
+      <div className="flex flex-col md:flex-row-reverse w-full max-w-4xl bg-white/90 dark:bg-[#232c47] rounded-xl shadow-2xl overflow-hidden dark:text-white">
+        <div className="flex flex-col justify-between items-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 dark:from-[#181f3a] dark:via-[#22305a] dark:to-[#2b4170] md:w-1/2 w-full p-8 relative">
           <div className="w-full">
             <h1 className="text-4xl font-bold text-white text-center drop-shadow mb-2">BYTES-GO</h1>
             <p className="text-blue-100 text-center text-lg font-light mb-8">
@@ -92,7 +89,7 @@ export const LoginForm = () => {
           className="w-full md:w-1/2 flex flex-col justify-center p-8"
         >
           <button
-            className="mb-4 flex items-center text-blue-900 hover:text-blue-700 transition w-fit"
+            className="mb-4 flex items-center text-blue-900 dark:text-blue-100 hover:text-blue-700 dark:hover:text-blue-300 transition w-fit"
             type="button"
             onClick={() => navigate(-1)}
             aria-label="Voltar"
@@ -100,9 +97,9 @@ export const LoginForm = () => {
             <ArrowLeft className="w-5 h-5 mr-1" />
             Voltar
           </button>
-          <Card className="w-full font-mono shadow-none border-none bg-transparent">
+          <Card className="w-full font-mono shadow-none border-none bg-transparent dark:bg-transparent">
             <CardHeader>
-              <CardTitle className='font-light text-2xl text-center text-blue-900'>LOGIN</CardTitle>
+              <CardTitle className='font-light text-2xl text-center text-blue-900 dark:text-blue-100'>LOGIN</CardTitle>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -115,9 +112,13 @@ export const LoginForm = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel className="text-blue-900 dark:text-blue-100">Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="Email" {...field} />
+                          <Input
+                            placeholder="Email"
+                            {...field}
+                            className="bg-white dark:bg-[#28335a] dark:text-white border border-blue-300 dark:border-blue-500"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -128,12 +129,13 @@ export const LoginForm = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel className="text-blue-900 dark:text-blue-100">Password</FormLabel>
                         <FormControl>
                           <Input
                             type="password"
                             placeholder="Password"
                             {...field}
+                            className="bg-white dark:bg-[#28335a] dark:text-white border border-blue-300 dark:border-blue-500"
                           />
                         </FormControl>
                         <FormMessage />
@@ -142,7 +144,9 @@ export const LoginForm = () => {
                   />
                   <div className="flex-col gap-2 text-center">
                     <Toaster />
-                    <Button type="submit" className="w-full">Sign In</Button>
+                    <Button type="submit" className="w-full bg-blue-900 dark:bg-blue-700 text-white">
+                      Sign In
+                    </Button>
                   </div>
                 </form>
               </Form>
@@ -151,7 +155,7 @@ export const LoginForm = () => {
                   Não tem uma conta?
                   <Link
                     to="/register"
-                    className="text-blue-900 hover:underline pl-1 "
+                    className="text-blue-900 dark:text-blue-100 hover:underline pl-1 "
                   >
                     Clique aqui para registrar
                   </Link>

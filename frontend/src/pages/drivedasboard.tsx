@@ -20,7 +20,7 @@ export const Driver = () => {
   const user = session ? JSON.parse(session) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 p-4 font-mono">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 dark:from-[#181f3a] dark:via-[#22305a] dark:to-[#2b4170] p-4 font-mono">
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export const Driver = () => {
         className="mb-10 max-w-3xl mx-auto"
       >
         <h2 className="text-xl font-semibold text-blue-100 mb-2">Sua Localização Atual</h2>
-        <div className="rounded-xl overflow-hidden shadow-lg bg-white/80 p-4">
+        <div className="rounded-xl overflow-hidden shadow-lg bg-white/80 dark:bg-[#232c47] p-4 dark:text-white">
           <GeolocationPage />
         </div>
       </motion.section>
@@ -49,9 +49,9 @@ export const Driver = () => {
         className="mb-10 max-w-3xl mx-auto"
       >
         <h2 className="text-xl font-semibold text-blue-100 mb-2">Seu Carro</h2>
-        <Card className="bg-white/90">
+        <Card className="bg-white/90 dark:bg-[#232c47] dark:text-white">
           <CardHeader>
-            <CardTitle className="text-blue-900">GMC Taxi</CardTitle>
+            <CardTitle className="text-blue-900 dark:text-blue-100">GMC Taxi</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col md:flex-row gap-4 items-center">
@@ -61,9 +61,9 @@ export const Driver = () => {
                 className="w-32 h-20 object-cover rounded shadow"
               />
               <div>
-                <div className="text-blue-900 font-bold">Modelo: GMC</div>
-                <div className="text-blue-800">Cor: Amarelo</div>
-                <div className="text-blue-800">Placa: ABC-1234</div>
+                <div className="text-blue-900 dark:text-blue-100 font-bold">Modelo: GMC</div>
+                <div className="text-blue-800 dark:text-blue-200">Cor: Amarelo</div>
+                <div className="text-blue-800 dark:text-blue-200">Placa: ABC-1234</div>
               </div>
             </div>
           </CardContent>
@@ -87,18 +87,18 @@ export const Driver = () => {
               <motion.div
                 key={order._id}
                 whileHover={{ scale: 1.03 }}
-                className="bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2"
+                className="bg-white dark:bg-[#232c47] rounded-xl shadow-lg p-4 flex flex-col gap-2 dark:text-white"
               >
                 <div>
-                  <span className="font-bold text-blue-900">Cliente:</span> {order.user?.name}
+                  <span className="font-bold text-blue-900 dark:text-blue-100">Cliente:</span> {order.user?.name}
                 </div>
-                <div className="text-blue-800">
+                <div className="text-blue-800 dark:text-blue-200">
                   Status: <span className="font-semibold">{order.status}</span>
                 </div>
-                <div className="text-blue-800">
+                <div className="text-blue-800 dark:text-blue-200">
                   Total: <span className="font-semibold">MZN {order.total?.toFixed(2)}</span>
                 </div>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-gray-400 dark:text-gray-300">
                   {order.createdAt && new Date(order.createdAt).toLocaleString()}
                 </div>
               </motion.div>
@@ -106,8 +106,6 @@ export const Driver = () => {
           </div>
         )}
       </motion.section>
-
-
     </div>
   );
 };

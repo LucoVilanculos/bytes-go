@@ -96,7 +96,7 @@ function MotivoCheckbox({ id, label, checked, onChange }: any) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 30 }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="bg-white rounded-xl shadow-lg p-4 flex flex-col gap-2 border-l-4 border-blue-700"
+                className="bg-white dark:bg-[#232c47] rounded-xl shadow-lg p-4 flex flex-col gap-2 border-l-4 border-blue-700 dark:border-blue-400 dark:text-white"
               >
                 <div className="font-bold text-blue-900">Motivo(s): {report.reason}</div>
                 <div className="text-blue-800">{report.description}</div>
@@ -116,7 +116,7 @@ function MotivoCheckbox({ id, label, checked, onChange }: any) {
         <DialogTrigger className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
           Denunciar
         </DialogTrigger>
-        <DialogContent className="bg-blue-50 border-blue-400 text-blue-900">
+        <DialogContent className="bg-blue-50 dark:bg-[#28335a] border-blue-400 text-blue-900 dark:text-white">
           <DialogHeader>
             <DialogTitle>Denunciar conteúdo</DialogTitle>
             <DialogDescription>Selecione o motivo:</DialogDescription>
@@ -134,7 +134,7 @@ function MotivoCheckbox({ id, label, checked, onChange }: any) {
             ))}
             <textarea
               placeholder="Outros detalhes (opcional)"
-              className="w-full p-3 border border-blue-200 rounded bg-white text-blue-900"
+              className="w-full p-3 border border-blue-200 dark:border-blue-500 rounded bg-white dark:bg-[#232c47] text-blue-900 dark:text-white"
               rows={4}
             />
 

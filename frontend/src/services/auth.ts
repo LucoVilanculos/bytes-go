@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { UserProps } from "../types/users";
+import type { UserProps } from "../types/user";
 
 interface LoginData {
   email: string;
@@ -12,7 +12,7 @@ interface LoginResponse {
   token: string;
 }
 
-const BASE_URL = import.meta.env.VITE_HOST;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function login(data: LoginData): Promise<LoginResponse> {
   try {

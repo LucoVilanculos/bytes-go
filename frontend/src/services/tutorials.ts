@@ -1,4 +1,5 @@
-import api from "./faqs"; 
+import api from "./faqs";
+ 
 
 export interface Tutorial {
   _id: string;
